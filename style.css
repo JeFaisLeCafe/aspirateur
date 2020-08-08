@@ -14,3 +14,13 @@ canvas {
   top: 0;
   left: 0;
 }
+
+.infos {
+  color: lightblue;
+  position: absolute;
+  bottom: 30px;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  justify-content: space-around;
+}

@@ -1,15 +1,17 @@
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
-
+let score = 0;
+let time = 0;
 // CONSTANTES
 const PARTICULE_NUMBER = 1000;
 const MOUSE_RADIUS = 100;
 const PARTICULE_BASE_SIZE = 3;
 const PARTICULE_MAX_SIZE = 30;
 const FORCE_MULTIPLIER = 3;
+const MOUSE_POINTER_SIZE = 3;
 
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.height = window.innerHeight - 100;
 
 let particuleArray = [];
 
@@ -17,10 +19,10 @@ let particuleArray = [];
 const mouse = {
   x: null,
   y: null,
-  radius: MOUSE_RADIUS
+  radius: MOUSE_RADIUS,
 };
 
-window.addEventListener("mousemove", e => {
+window.addEventListener("mousemove", (e) => {
   mouse.x = e.x;
   mouse.y = e.y;
 });
@@ -49,6 +51,7 @@ class Particule {
     ctx.closePath();
     ctx.fill();
   }
+
   update() {
     let dx = mouse.x - this.x;
     let dy = mouse.y - this.y;
@@ -58,13 +61,21 @@ class Particule {
     let forceDirectionX = dx / distance;
     let forceDirectionY = dy / distance;
 
-    if (distance < MOUSE_RADIUS) {
+    if (distance < MOUSE_POINTER_SIZE) {
+      // need to remove itself from the array, and update the score
+      this.die();
+      score += 1;
+    } else if (distance < MOUSE_RADIUS) {
       // this.size = PARTICULE_MAX_SIZE;
       this.x += forceDirectionX * FORCE_MULTIPLIER;
       this.y += forceDirectionY * FORCE_MULTIPLIER;
     } else {
       this.size = PARTICULE_BASE_SIZE;
     }
+  }
+
+  die() {
+    particuleArray.splice(particuleArray.indexOf(this), 1);
   }
 }
 
@@ -84,6 +95,10 @@ function animate() {
     particuleArray[i].draw();
     particuleArray[i].update();
   }
+
+  // animate score and time
+  document.getElementById("#time").innerHTML = "AAA";
+
   requestAnimationFrame(animate);
 }
 animate();
